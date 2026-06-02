@@ -19,7 +19,7 @@
     const tbm = params.get('tbm');
 
     // Configuration
-    const MIN_QUERY_LENGTH = 15;
+    const MIN_QUERY_LENGTH = 20;
     const KEY_MODE = 'sa_active_mode';
     const KEY_QUERY = 'sa_last_query';
 
