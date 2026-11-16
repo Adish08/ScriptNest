@@ -1,13 +1,15 @@
 // ==UserScript==
-// @name         Youtube Premium Logo (Mobile)
+// @name         YouTube Premium Logo (Mobile)
 // @namespace    https://github.com/adish08
-// @description  Premium wordmark for m.youtube.com: patched in place, icon-only left untouched
+// @description  Premium wordmark for m.youtube.com with native long-press link support
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=YouTube.com
 // @license      MIT
 // @match        *://m.youtube.com/*
-// @version      3.0
-// @run-at       document-start
+// @version      4.1
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/Youtube%20Premium%20Logo%20%28Mobile%29.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/Youtube%20Premium%20Logo%20%28Mobile%29.user.js
+// @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
@@ -17,10 +19,7 @@
   const NS = 'http://www.w3.org/2000/svg';
   const ICON_PREFIX = 'M14.4848 20';
   const PLAY_PREFIX = 'M19 10';
-  const RATIO = 101 / 20;
   const VIEWBOX = '0 0 101 20';
-  const KEY = 'ytpl-signed-in';
-  const root = document.documentElement;
 
   const RED_D = 'M14.4848 20C14.4848 20 23.5695 20 25.8229 19.4C27.0917 19.06 28.0459 18.08 28.3808 16.87C29 14.65 29 9.98 29 9.98C29 9.98 29 5.34 28.3808 3.14C28.0459 1.9 27.0917 0.94 25.8229 0.61C23.5695 0 14.4848 0 14.4848 0C14.4848 0 5.42037 0 3.17711 0.61C1.9286 0.94 0.954148 1.9 0.59888 3.14C0 5.34 0 9.98 0 9.98C0 9.98 0 14.65 0.59888 16.87C0.954148 18.08 1.9286 19.06 3.17711 19.4C5.42037 20 14.4848 20 14.4848 20Z';
   const PLAY_D = 'M19 10L11.5 5.75V14.25L19 10Z';
@@ -38,40 +37,40 @@
     'ytm-home-logo',
     'ytm-topbar-logo-renderer',
     'ytm-mobile-topbar-renderer .mobile-topbar-logo',
-    'ytm-mobile-topbar-renderer ytm-logo'
+    'ytm-mobile-topbar-renderer ytm-logo',
+    '#home-icon'
   ];
 
-  // ---------- Signed-in gate ----------
-  let cached = null;
-  try { cached = localStorage.getItem(KEY); } catch (e) { /* ignore */ }
-  let signedIn = cached === '0' ? false : null; // null = unknown, treated as signed in
-  let confirmed = false;
-  if (signedIn !== false) root.classList.add('ytpl-on');
+  const HOST_SVG_SELECTOR = HOSTS.map((h) => `${h} svg`).join(',');
 
-  // ---------- Boot CSS: hides un-patched logos on first load only ----------
-  // visibility:hidden keeps the layout box, so nothing shifts. A timer removes it
-  // (failsafe), so a bug can never leave the logo invisible.
-  function addStyle(text) {
+  function injectCSS() {
+    if (document.getElementById('ytpl-css')) return;
     const s = document.createElement('style');
-    s.textContent = text;
-    (document.head || root).appendChild(s);
-  }
-  addStyle('html.ytpl-boot.ytpl-on ' +
-    HOSTS.map((h) => h + ' svg:not([data-ytpl])').join(',html.ytpl-boot.ytpl-on ') +
-    '{visibility:hidden!important}');
-  addStyle('html.ytpl-boot.ytpl-on svg:has(path[d^="' + ICON_PREFIX + '"]):not([data-ytpl]){visibility:hidden!important}');
-  root.classList.add('ytpl-boot');
-  function endBoot() { root.classList.remove('ytpl-boot'); }
-  setTimeout(endBoot, 2500);
-
-  // ---------- Helpers ----------
-  const originals = new WeakMap(); // svg -> YouTube's own contents, for restore
-
-  function setSize(svg, h) {
-    const w = h * RATIO;
-    [['height', h], ['min-height', h], ['max-height', h],
-     ['width', w], ['min-width', w], ['max-width', w]]
-      .forEach(([k, v]) => svg.style.setProperty(k, v + 'px', 'important'));
+    s.id = 'ytpl-css';
+    s.textContent = `
+      svg[data-ytpl="1"] {
+        height: 20px !important;
+        min-height: 20px !important;
+        max-height: 20px !important;
+        width: 101px !important;
+        min-width: 101px !important;
+        max-width: 101px !important;
+        overflow: visible !important;
+      }
+      /* Ensure parent container can host the long-press anchor overlay */
+      *:has(> svg[data-ytpl="1"]) {
+        position: relative !important;
+        filter: none !important;
+      }
+      a.ytpl-anchor {
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 10 !important;
+        display: block !important;
+        -webkit-touch-callout: default !important;
+      }
+    `;
+    (document.head || document.documentElement).appendChild(s);
   }
 
   function makePath(d, cls, fill) {
@@ -82,159 +81,102 @@
     return p;
   }
 
-  function applyText(svg, color) {
-    svg.querySelectorAll('.ytpl-t').forEach((p) => p.style.setProperty('fill', color, 'important'));
-  }
-
-  // Icon-only logo: small viewBox, or only the icon + triangle paths
-  function isCompact(svg) {
-    const vb = svg.viewBox && svg.viewBox.baseVal;
-    if (vb && vb.width && vb.height) return vb.width / vb.height < 2.2;
-    const paths = svg.querySelectorAll('path');
-    if (!paths.length) return false;
-    return Array.prototype.every.call(paths, (p) => {
-      const d = p.getAttribute('d') || '';
-      return d.indexOf(ICON_PREFIX) === 0 || d.indexOf(PLAY_PREFIX) === 0;
-    });
-  }
-
-  function isPatched(svg) {
-    return svg.dataset.ytpl === '1' &&
-      svg.getAttribute('viewBox') === VIEWBOX &&
-      !!svg.querySelector('.ytpl-t');
-  }
-
-  function inShorts(el) {
-    return location.pathname.indexOf('/shorts') === 0 ||
-      !!el.closest('[class*="shorts"],[class*="reel"]');
-  }
-
   function isDark() {
-    if (root.hasAttribute('dark') || (document.body && document.body.hasAttribute('dark'))) return true;
-    const els = [document.body, root];
-    for (let i = 0; i < els.length; i++) {
-      if (!els[i]) continue;
-      const m = getComputedStyle(els[i]).backgroundColor.match(/[\d.]+/g);
+    const root = document.documentElement;
+    if (root.hasAttribute('dark') || document.body?.hasAttribute('dark')) return true;
+    for (const el of [document.body, root]) {
+      if (!el) continue;
+      const m = getComputedStyle(el).backgroundColor.match(/[\d.]+/g);
       if (m && (m.length < 4 || +m[3] > 0.5)) {
         return 0.299 * m[0] + 0.587 * m[1] + 0.114 * m[2] < 128;
       }
     }
-    return window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches;
   }
 
-  // Undo colour-altering filters on parents (the Shorts "white logo" trick)
-  function neutralise(svg) {
-    let el = svg.parentElement;
-    for (let i = 0; i < 2 && el; i++, el = el.parentElement) {
-      const f = getComputedStyle(el).filter;
-      if (f && f !== 'none' && /brightness|invert|grayscale|saturate|contrast/.test(f)) {
-        el.style.setProperty('filter', 'none', 'important');
+  function inShorts(el) {
+    return location.pathname.startsWith('/shorts') || !!el.closest('[class*="shorts"],[class*="reel"]');
+  }
+
+  function isCompact(svg) {
+    const vb = svg.viewBox?.baseVal;
+    if (vb && vb.width && vb.height) return vb.width / vb.height < 2.2;
+    const paths = svg.querySelectorAll('path');
+    return paths.length > 0 && Array.from(paths).every((p) => {
+      const d = p.getAttribute('d') || '';
+      return d.startsWith(ICON_PREFIX) || d.startsWith(PLAY_PREFIX);
+    });
+  }
+
+  function attachLongPressLink(svg) {
+    if (svg.closest('a[href]')) return;
+    const parent = svg.parentElement;
+    if (!parent || parent.querySelector('a.ytpl-anchor')) return;
+
+    const a = document.createElement('a');
+    a.href = '/';
+    a.className = 'ytpl-anchor';
+    a.setAttribute('aria-label', 'YouTube Home');
+    // Normal tap passes through to YouTube's SPA router; long-press opens browser link menu
+    a.addEventListener('click', (e) => {
+      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+        e.preventDefault();
       }
-    }
+    });
+    parent.appendChild(a);
   }
 
-  // ---------- Patch / restore, always on YouTube's own element ----------
-  function patch(svg) {
-    // Remember YouTube's own contents once (only while they are still YouTube's)
-    if (!svg.querySelector('.ytpl-t')) {
-      originals.set(svg, {
-        vb: svg.getAttribute('viewBox'),
-        kids: Array.prototype.slice.call(svg.childNodes),
-        style: svg.getAttribute('style'),
-        w: svg.getAttribute('width'),
-        h: svg.getAttribute('height')
-      });
-      const r = svg.getBoundingClientRect().height; // measure while it is still YouTube's
-      svg.dataset.ytplH = r >= 14 && r <= 28 ? String(r) : '20';
-    }
-    const h = parseFloat(svg.dataset.ytplH) || 20;
-
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
+  function patch(svg, textColor) {
+    svg.replaceChildren();
     svg.setAttribute('viewBox', VIEWBOX);
-    svg.setAttribute('height', String(h));
-    svg.setAttribute('width', String(h * RATIO));
-    setSize(svg, h);
-    svg.style.setProperty('overflow', 'visible', 'important');
 
     const icon = document.createElementNS(NS, 'g');
     icon.appendChild(makePath(RED_D, '', '#FF0033'));
     icon.appendChild(makePath(PLAY_D, '', '#FFFFFF'));
+
     const text = document.createElementNS(NS, 'g');
-    TEXT_D.forEach((d) => text.appendChild(makePath(d, 'ytpl-t', '#FFFFFF')));
-    svg.appendChild(icon);
-    svg.appendChild(text);
+    TEXT_D.forEach((d) => text.appendChild(makePath(d, 'ytpl-t', textColor)));
 
+    svg.append(icon, text);
     svg.dataset.ytpl = '1';
-    neutralise(svg);
+    attachLongPressLink(svg);
   }
 
-  function restoreAll() {
-    document.querySelectorAll('svg[data-ytpl="1"]').forEach((svg) => {
-      const o = originals.get(svg);
-      if (o) {
-        while (svg.firstChild) svg.removeChild(svg.firstChild);
-        o.kids.forEach((k) => svg.appendChild(k));
-        const put = (n, v) => (v === null ? svg.removeAttribute(n) : svg.setAttribute(n, v));
-        put('viewBox', o.vb); put('style', o.style); put('width', o.w); put('height', o.h);
-      }
-      delete svg.dataset.ytpl;
-    });
-    endBoot();
-  }
-
-  function resolveLogin() {
-    if (confirmed) return;
-    let v;
-    let fromCfg = false;
-    try {
-      if (window.ytcfg && typeof window.ytcfg.get === 'function') {
-        const x = window.ytcfg.get('LOGGED_IN');
-        if (typeof x === 'boolean') { v = x; fromCfg = true; }
-      }
-    } catch (e) { /* ignore */ }
-    if (v === undefined && document.querySelector('ytm-mobile-topbar-renderer a[href*="ServiceLogin"]')) {
-      v = false;
-    }
-    if (v === undefined) return;
-    confirmed = true;
-    signedIn = v;
-    if (fromCfg) { try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (e) { /* ignore */ } }
-    root.classList.toggle('ytpl-on', v);
-    if (!v) restoreAll();
-  }
-
-  // ---------- Core: idempotent ----------
   function sync() {
-    resolveLogin();
-    if (signedIn === false) return;
+    try {
+      if (window.ytcfg?.get('LOGGED_IN') === false) return;
+    } catch {}
 
-    const found = new Set();
-    document.querySelectorAll('path[d^="' + ICON_PREFIX + '"]').forEach((p) => {
+    injectCSS();
+
+    const found = new Set(document.querySelectorAll(HOST_SVG_SELECTOR));
+    document.querySelectorAll(`path[d^="${ICON_PREFIX}"]`).forEach((p) => {
       const s = p.closest('svg');
       if (s) found.add(s);
     });
-    document.querySelectorAll(HOSTS.map((h) => h + ' svg').join(',')).forEach((s) => found.add(s));
     if (!found.size) return;
 
     const dark = isDark();
 
     found.forEach((svg) => {
-      if (isPatched(svg)) {
-        applyText(svg, inShorts(svg) || dark ? '#FFFFFF' : '#0F0F0F');
+      const color = inShorts(svg) || dark ? '#FFFFFF' : '#0F0F0F';
+
+      // Verify both dataset flag AND that YouTube hasn't overwritten our child nodes
+      if (svg.dataset.ytpl === '1' && svg.querySelector('.ytpl-t')) {
+        svg.querySelectorAll('.ytpl-t').forEach((p) => p.style.setProperty('fill', color, 'important'));
+        attachLongPressLink(svg);
         return;
       }
-      if (isCompact(svg)) {            // icon-only: leave YouTube's own logo alone
+
+      if (isCompact(svg)) {
         svg.dataset.ytpl = 'skip';
         return;
       }
-      patch(svg);                      // wordmark: patch in place
-      applyText(svg, inShorts(svg) || dark ? '#FFFFFF' : '#0F0F0F');
-    });
 
-    endBoot();
+      patch(svg, color);
+    });
   }
 
-  // Microtask, not requestAnimationFrame: runs before the browser paints
   let queued = false;
   function schedule() {
     if (queued) return;
@@ -245,7 +187,7 @@
     });
   }
 
-  new MutationObserver(schedule).observe(root, { childList: true, subtree: true });
+  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
   window.addEventListener('state-navigatefinish', schedule);
   window.addEventListener('yt-navigate-finish', schedule);
   window.addEventListener('popstate', schedule);

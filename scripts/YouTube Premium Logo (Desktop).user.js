@@ -3,6 +3,8 @@
 // @namespace    local.youtube-premium-logo.desktop
 // @description  Premium logo for youtube.com and music.youtube.com; hides the Premium/Upgrade menu entry
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/YouTube%20Premium%20Logo%20%28Desktop%29.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/YouTube%20Premium%20Logo%20%28Desktop%29.user.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=YouTube.com
 // @license      MIT
 // @match        *://www.youtube.com/*

@@ -3,6 +3,8 @@
 // @namespace    yt-intent-gate
 // @version      2.2.1
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/YouTube%20Intent%20Gate.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/YouTube%20Intent%20Gate.user.js
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmMDMiLz48cGF0aCBkPSJNMzIgMTBhMjIgMjIgMCAxIDAgMCA0NCAyMiAyMiAwIDEgMCAwLTQ0em0wIDUuNWExNi41IDE2LjUgMCAxIDEgMCAzMyAxNi41IDE2LjUgMCAxIDEgMC0zM3oiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjMyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48cGF0aCBkPSJNMzIgMTBBMjIgMjIgMCAxIDEgMTAgMzJMMTUuNSAzMkExNi41IDE2LjUgMCAxIDAgMzIgMTUuNVoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjEyLjc1IiByPSIyLjc1IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iMTIuNzUiIGN5PSIzMiIgcj0iMi43NSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yNy41IDI0LjVMNDAuNSAzMiAyNy41IDM5LjVaIiBmaWxsPSIjZmZmIi8+PC9zdmc+
 // @description  Removes Shorts (nav, shelves, redirects) and hides the homepage feed behind a 21s "What did you come here to do?" gate. Unhook-style: CSS-only hide/reveal, DOM is never torn down.
 // @match        https://www.youtube.com/*

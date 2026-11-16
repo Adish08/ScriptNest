@@ -4,6 +4,8 @@
 // @version      2026.5.0
 // @description  Sends long, natural-language Google searches to AI Mode. Respects manual switches to All/Images/etc. and per-tab choices.
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/Google%20Smart%20AI%20Redirect.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/Google%20Smart%20AI%20Redirect.user.js
 // @icon         data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(%23glow)" fill="none" stroke="%23FFFFFF" stroke-width="9" stroke-linecap="round"><circle cx="43" cy="43" r="24"/><line x1="61" y1="61" x2="83" y2="83"/></g><path d="M43 27 Q43 43 59 43 Q43 43 43 59 Q43 43 27 43 Q43 43 43 27 Z" fill="%23FFFFFF" filter="url(%23glow)"/></svg>
 // @include      /^https?:\/\/(www\.)?google\.[a-z.]+\/search/
 // @run-at       document-start

@@ -4,6 +4,8 @@
 // @description  Reveals a password field immediately while hovering over it
 // @version      1.5
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/Show%20Password%20on%20Hover.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/Show%20Password%20on%20Hover.user.js
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwZjE3MmEiLz48cGF0aCBkPSJNOCAzMnM5LTE0IDI0LTE0IDI0IDE0IDI0IDE0LTkgMTQtMjQgMTRTOCAzMiA4IDMyeiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSI3IiBmaWxsPSIjZmZmIi8+PC9zdmc+
 // @license      free
 // @match        *://*/*

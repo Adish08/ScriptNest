@@ -3,6 +3,8 @@
 // @namespace    https://github.com/adish08
 // @version      1.3.1
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/reCAPTCHA%20Auto-Checkbox%20%26%20Buster%20Helper.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/reCAPTCHA%20Auto-Checkbox%20%26%20Buster%20Helper.user.js
 // @description  Clicks the reCAPTCHA checkbox / triggers Buster only when the widget is actually on screen.
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACkklEQVR42u1bO1LDMBCVdtxRQ4VnSMMNUqXMFTzkDFyBA+Quyah1SUmVG6SBmVBBnRoKRowjLMe72lUkmW0Sf6TkvX37kcfSCmGvh48vlYHN6hs99l5dCmgqGRoD/u72OgvQb++fo0nQJQGnEKGHwOcKfIgIlwQoHbyLxVU3nBtQIgm9BFhmSgTvktBVAZRQ6ihmMUPp0j8XCqAmbloq9pfrI3ns89NVtNKoJZNfCAnSZFgCkg+B5frIQqTPKqk/zWn7tlV1+/P98PLAOjekDt61erFNUwFSwPdt6yWBQw2Qg9cl1QApg+/zPjcJk2+EIGfvc6igugT4bnOzXB//HFPzASUpVjHl1tfVuefscd3SfwdDBsTyPralpXizXmzR4VBdwutYEribnyAFXKrmJ1kFYq3kuPv/KARwL2OlSIApy19MAVIPMSRUMPlWuOL2bG5hgiLAGHP2nsd7pYxRqmma5B+GiDVCEuDH5AAKQVVJ8Zz8YojD5pt+de1WJp0QMMawhoEPtO8eDBmQq8e5xogRMKZiSIDHjhVVQAgJIeAxc0ApsqfOJU6AMQalBE7wY+ZEE9A0DSnDc+SEMYYth4AFH1MNVPAYEoLeD+ACY4kNkX8faHe+7j0s7wdI9fwS4LN/HuCTdQh4FgJiqAAT29gwAs4YjuH57rF7jZJD2EKAWh5jr/7Ec0AICT5QQ9l8rPd9c4skQawaQstpSPkUrQKcYeEDGdo6a6Xivinu83aXqCFQu5VR803z+0kJLdsEzeobHZ2A2IuivtjvEgB9F1JufLjAn+QAzD67XEg4N9ZiBvdESiqgkuAb05X+SRK0lsOmKWpj5Ns5Nvltc/8bJ4cmmOzW2SEScrOgzdO5koEp69+h4WiuKAGyDgAAAABJRU5ErkJggg==
 // @match        *://*.google.com/recaptcha/*

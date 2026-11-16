@@ -4,6 +4,8 @@
 // @version      1.2
 // @description  Keeps feed previews muted; unmutes only when a video or Short is opened on m.youtube.com
 // @author       adish08
+// @updateURL    https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/YouTube%20Mobile%20Auto%20Unmute%20%28Videos%20%2B%20Shorts%20only%29.user.js
+// @downloadURL  https://raw.githubusercontent.com/Adish08/ScriptNest/main/scripts/YouTube%20Mobile%20Auto%20Unmute%20%28Videos%20%2B%20Shorts%20only%29.user.js
 // @icon         data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22108%22%20fill%3D%22%23FF0000%22%2F%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M%20118%20208%20L%20118%20304%20L%20168%20304%20L%20248%20376%20L%20248%20136%20L%20168%20208%20Z%22%2F%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%2226%22%20stroke-linecap%3D%22round%22%20d%3D%22M%20292%20196%20A%2078%2078%200%200%201%20292%20316%22%2F%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%2226%22%20stroke-linecap%3D%22round%22%20d%3D%22M%20338%20158%20A%20132%20132%200%200%201%20338%20354%22%2F%3E%3C%2Fsvg%3E
 // @match        https://m.youtube.com/*
 // @match        https://www.youtube.com/*
